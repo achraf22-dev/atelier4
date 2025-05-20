@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>QCM - Vérification Côté Client</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+      .question {
+        margin-bottom: 20px;
+        padding: 10px;
+        border: 1px solid #ccc;
+      }
+      .correct {
+        background-color: #d4edda;
+      } /* vert */
+      .incorrect {
+        background-color: #f8d7da;
+      } /* rouge */
+      .missing {
+        background-color: #fff3cd;
+      } /* orange */
+      .note {
+        font-weight: bold;
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>QCM - 5 questions</h2>
+
+    <form id="qcm-form">
+      <!-- Question 1 -->
+      <div class="question" data-correct="b">
+        <p>1. Quel est le langage utilisé pour structurer une page web ?</p>
+        <label><input type="radio" name="q1" value="a" />CSS</label><br />
+        <label><input type="radio" name="q1" value="b" />HTML</label><br />
+        <label><input type="radio" name="q1" value="c" />PHP</label>
+      </div>
+
+      <!-- Question 2 -->
+      <div class="question" data-correct="a">
+        <p>2. Quel langage est utilisé pour styliser une page web ?</p>
+        <label><input type="radio" name="q2" value="a" />CSS</label><br />
+        <label><input type="radio" name="q2" value="b" />JavaScript</label
+        ><br />
+        <label><input type="radio" name="q2" value="c" />SQL</label>
+      </div>
+
+      <!-- Question 3 -->
+      <div class="question" data-correct="c">
+        <p>3. Quel langage est utilisé pour les interactions dynamiques ?</p>
+        <label><input type="radio" name="q3" value="a" />HTML</label><br />
+        <label><input type="radio" name="q3" value="b" />CSS</label><br />
+        <label><input type="radio" name="q3" value="c" />JavaScript</label>
+      </div>
+
+      <!-- Question 4 -->
+      <div class="question" data-correct="a">
+        <p>4. Lequel de ces éléments est une base de données ?</p>
+        <label><input type="radio" name="q4" value="a" />MySQL</label><br />
+        <label><input type="radio" name="q4" value="b" />Bootstrap</label><br />
+        <label><input type="radio" name="q4" value="c" />Git</label>
+      </div>
+
+      <!-- Question 5 -->
+      <div class="question" data-correct="b">
+        <p>5. Quel outil permet de gérer les versions d’un projet ?</p>
+        <label><input type="radio" name="q5" value="a" />Figma</label><br />
+        <label><input type="radio" name="q5" value="b" />Git</label><br />
+        <label><input type="radio" name="q5" value="c" />Photoshop</label>
+      </div>
+
+      <button type="button" id="corriger">Corriger</button>
+    </form>
+
+    <p class="note" id="note-final"></p>
+
+    <script>
+      $(document).ready(function () {
+        $("#corriger").on("click", function () {
+          let score = 0;
+          let total = $(".question").length;
+          let incomplet = false;
+
+          $(".question").each(function () {
+            let correct = $(this).data("correct");
+            let selected = $(this).find("input:checked");
+
+            // Réinitialisation
+            $(this).removeClass("correct incorrect missing");
+            $(this).find("label").css("background-color", "");
+
+            if (selected.length === 0) {
+              $(this).addClass("missing");
+              incomplet = true;
+            } else {
+              if (selected.val() === correct) {
+                $(this).addClass("correct");
+                selected.parent().css("background-color", "#28a745"); // vert
+                score++;
+              } else {
+                $(this).addClass("incorrect");
+                selected.parent().css("background-color", "#dc3545"); // rouge
+                $(this)
+                  .find("input[value='" + correct + "']")
+                  .parent()
+                  .css("background-color", "#28a745"); // vert
+              }
+            }
+          });
+
+          if (incomplet) {
+            $("#note-final")
+              .text("Veuillez répondre à toutes les questions.")
+              .css("color", "orange");
+          } else {
+            $("#note-final")
+              .text("Note obtenue : " + score + " / " + total)
+              .css("color", "black");
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Formulaire d'inscription</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+      .error {
+        color: red;
+        font-size: 0.9em;
+      }
+      input,
+      select {
+        display: block;
+        margin-bottom: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Formulaire d'inscription</h2>
+    <form id="form-inscription">
+      <input type="text" name="nom" placeholder="Nom" />
+      <input type="text" name="prenom" placeholder="Prénom" />
+      <input type="text" name="adresse" placeholder="Adresse" />
+      <input type="email" name="email" placeholder="Email" />
+      <input type="text" name="login" placeholder="Login" />
+      <input type="password" name="password" placeholder="Mot de passe" />
+      <input
+        type="password"
+        name="conf_password"
+        placeholder="Confirmer le mot de passe"
+      />
+      <input type="text" name="telephone" placeholder="Téléphone" />
+      <select name="civilite">
+        <option value="">Civilité</option>
+        <option value="Mr">Mr</option>
+        <option value="Mme">Mme</option>
+      </select>
+      <input type="text" name="pays" placeholder="Pays" />
+      <button type="submit">S'inscrire</button>
+    </form>
+
+    <script>
+      $(document).ready(function () {
+        $("#form-inscription").on("submit", function (e) {
+          e.preventDefault(); // empêcher l'envoi du formulaire
+          $(".error").remove(); // supprimer les messages d'erreur précédents
+          let valid = true;
+
+          // Récupération des champs
+          const email = $("input[name='email']").val().trim();
+          const tel = $("input[name='telephone']").val().trim();
+          const pass = $("input[name='password']").val();
+          const confPass = $("input[name='conf_password']").val();
+
+          // Regex
+          const emailRegex = /^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$/;
+          const telRegex = /^0[5-7][0-9]{8}$/;
+
+          // Vérification des champs obligatoires
+          $("#form-inscription input, #form-inscription select").each(
+            function () {
+              if ($(this).val().trim() === "") {
+                $(this).after('<div class="error">Champ obligatoire</div>');
+                valid = false;
+              }
+            }
+          );
+
+          // Vérification de l'email
+          if (!emailRegex.test(email)) {
+            $("input[name='email']").after(
+              '<div class="error">Email invalide</div>'
+            );
+            valid = false;
+          }
+
+          // Vérification du téléphone
+          if (!telRegex.test(tel)) {
+            $("input[name='telephone']").after(
+              '<div class="error">Téléphone invalide</div>'
+            );
+            valid = false;
+          }
+
+          // Vérification des mots de passe
+          if (pass !== confPass) {
+            $("input[name='conf_password']").after(
+              '<div class="error">Les mots de passe ne correspondent pas</div>'
+            );
+            valid = false;
+          }
+
+          if (valid) {
+            alert("Formulaire valide !");
+            // ici, tu pourrais envoyer les données via AJAX
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

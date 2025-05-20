@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Liste déroulante dynamique</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <body>
+    <h2>Sélection dynamique avec Ajax</h2>
+
+    <form>
+      <label>Pays :</label>
+      <select id="pays">
+        <option value="">-- Sélectionner un pays --</option>
+      </select><br /><br />
+
+      <label>Région :</label>
+      <select id="region">
+        <option value="">-- Sélectionner une région --</option>
+      </select><br /><br />
+
+      <label>Ville :</label>
+      <select id="ville">
+        <option value="">-- Sélectionner une ville --</option>
+      </select>
+    </form>
+
+    <script>
+      $(document).ready(function () {
+        // Charger les pays
+        $.get("api.php?action=pays", function (data) {
+          $("#pays").html(data);
+        });
+
+        // Charger les régions selon le pays sélectionné
+        $("#pays").change(function () {
+          let id_pays = $(this).val();
+          if (id_pays) {
+            $.get("api.php?action=regions&id_pays=" + id_pays, function (data) {
+              $("#region").html(data);
+              $("#ville").html('<option value="">-- Sélectionner une ville --</option>');
+            });
+          } else {
+            $("#region").html('<option value="">-- Sélectionner une région --</option>');
+            $("#ville").html('<option value="">-- Sélectionner une ville --</option>');
+          }
+        });
+
+        // Charger les villes selon la région sélectionnée
+        $("#region").change(function () {
+          let id_region = $(this).val();
+          if (id_region) {
+            $.get("api.php?action=villes&id_region=" + id_region, function (data) {
+              $("#ville").html(data);
+            });
+          } else {
+            $("#ville").html('<option value="">-- Sélectionner une ville --</option>');
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

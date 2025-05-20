@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Calculatrice jQuery</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        padding-top: 50px;
+      }
+      .calculator {
+        border: 2px solid #ccc;
+        border-radius: 10px;
+        padding: 20px;
+        width: 220px;
+        background: #f1f1f1;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+      }
+      .display {
+        width: 100%;
+        height: 40px;
+        font-size: 1.4em;
+        text-align: right;
+        padding: 5px;
+        margin-bottom: 15px;
+        background: white;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+      .buttons {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+      }
+      .btn {
+        padding: 15px;
+        font-size: 1.2em;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      .btn.operator {
+        background: #add8e6;
+      }
+      .btn.clear {
+        background: #f28b82;
+      }
+      .btn.equal {
+        background: #fff176;
+        grid-column: span 2;
+      }
+      .btn:active {
+        transform: scale(0.97);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="calculator">
+      <input type="text" class="display" id="result" readonly />
+
+      <div class="buttons">
+        <button class="btn">7</button>
+        <button class="btn">8</button>
+        <button class="btn">9</button>
+        <button class="btn operator">/</button>
+
+        <button class="btn">4</button>
+        <button class="btn">5</button>
+        <button class="btn">6</button>
+        <button class="btn operator">*</button>
+
+        <button class="btn">1</button>
+        <button class="btn">2</button>
+        <button class="btn">3</button>
+        <button class="btn operator">-</button>
+
+        <button class="btn">0</button>
+        <button class="btn equal">=</button>
+        <button class="btn operator">+</button>
+        <button class="btn clear">C</button>
+      </div>
+    </div>
+
+    <script>
+      $(document).ready(function () {
+        let expression = "";
+
+        $(".btn").click(function () {
+          const value = $(this).text();
+
+          if (value === "C") {
+            expression = "";
+            $("#result").val("");
+          } else if (value === "=") {
+            try {
+              const res = eval(expression);
+              $("#result").val(res);
+              expression = res.toString();
+            } catch (e) {
+              $("#result").val("Erreur");
+              expression = "";
+            }
+          } else {
+            expression += value;
+            $("#result").val(expression);
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
